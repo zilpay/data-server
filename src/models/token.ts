@@ -4,6 +4,7 @@ import {
   PrimaryKey,
   Property
 } from '@mikro-orm/core';
+import { viewIcon } from 'src/lib/viewblock';
 import { TokenTypes } from '../config/token-types';
 
 @Entity()
