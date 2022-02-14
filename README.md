@@ -1,1 +1,3 @@
 # data-server
+yarn add v1.22.17
+[1/4] Resolving packages...
