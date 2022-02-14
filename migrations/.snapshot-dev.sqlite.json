@@ -105,6 +105,15 @@
           "nullable": true,
           "mappedType": "text"
         },
+        "scope": {
+          "name": "scope",
+          "type": "json",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
         "type": {
           "name": "type",
           "type": "integer",

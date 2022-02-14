@@ -25,7 +25,6 @@ app.get('/', (_req, _res) => {
 
   // Server setup
   app.listen(port, () => {
-    console.log(`TypeScript with Express
-          http://localhost:${port}/`);
+    console.log(`TypeScript with Express http://localhost:${port}/`);
   });
 }());

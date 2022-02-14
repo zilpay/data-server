@@ -4,7 +4,6 @@ import {
   PrimaryKey,
   Property
 } from '@mikro-orm/core';
-import { viewIcon } from 'src/lib/viewblock';
 import { TokenTypes } from '../config/token-types';
 
 @Entity()
@@ -42,6 +41,9 @@ export class Token {
   @Property({ nullable: true })
   baseUri?: string;
 
+  @Property()
+  scope = 1;
+
   @Enum(() => TokenTypes)
   type!: TokenTypes;
 
@@ -52,6 +54,7 @@ export class Token {
     symbol: string,
     type: TokenTypes,
     decimals = 1,
+    scope = 1,
     initSupply = BigInt(1),
     contractOwner?: string,
     baseUri?: string
@@ -62,6 +65,7 @@ export class Token {
     this.symbol = symbol;
     this.type = type;
     this.decimals = decimals;
+    this.scope = scope;
     this.initSupply = String(initSupply);
     this.contractOwner = contractOwner;
     this.baseUri = baseUri;

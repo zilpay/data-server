@@ -1,4 +1,4 @@
-import type { AddressInit, RPCResponse } from 'types/rpc';
+import type { RPCResponse } from 'types/rpc';
 
 import { fromBech32Address } from '@zilliqa-js/crypto';
 import fetch from 'cross-fetch';
@@ -6,7 +6,7 @@ import fetch from 'cross-fetch';
 import { RPCHttpProvider } from '../lib/rpc-provider';
 import { RPCMethod } from '../config/rpc-methods';
 import { tohexString } from '../utils/hex';
-import { getMeta } from './cryptometa';
+import { CryptoMetaResponse, getMeta } from './cryptometa';
 import { initParser } from '../utils/init-parse';
 import { Token } from '../models/token';
 
@@ -14,12 +14,12 @@ export class Zilliqa {
   #provider = new RPCHttpProvider();
   #http = 'https://api.zilliqa.com';
 
-  async getInits(addresses: string[]) {
-    if (addresses.length === 0) {
-      throw new Error('Addresses Array is empty');
+  async getInits(metas: CryptoMetaResponse[]) {
+    if (metas.length === 0) {
+      throw new Error('meta Array is empty');
     }
   
-    const base16Addresses = addresses.map(fromBech32Address);
+    const base16Addresses = metas.map(({ bech32 }) => fromBech32Address(bech32));
     const requests = base16Addresses.map((address) => this.#provider.buildBody(
       RPCMethod.GetSmartContractInit,
       [tohexString(address)]
@@ -27,8 +27,8 @@ export class Zilliqa {
     const resList = await this.#send(requests);
     const result: Token[] = [];
 
-    for (let index = 0; index < addresses.length; index++) {
-      const bech32 = addresses[index];
+    for (let index = 0; index < metas.length; index++) {
+      const { bech32, score } = metas[index];
       const base16 = base16Addresses[index];
       const res = resList[index];
 
@@ -41,6 +41,7 @@ export class Zilliqa {
           init.symbol,
           init.type,
           init.decimals,
+          score,
           init.initSupply,
           init.contractOwner,
           init.baseUri
