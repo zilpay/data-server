@@ -1,6 +1,5 @@
 import { Token } from '../models/token';
 import { getMeta } from '../entrypoints/cryptometa';
-import { getCurrencyRate } from '../entrypoints/freecurrencyapi';
 import { Zilliqa } from '../entrypoints/zilliqa';
 import { initORM } from '../orm';
 
