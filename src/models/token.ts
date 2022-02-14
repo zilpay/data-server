@@ -29,7 +29,7 @@ export class Token {
   @Property({ default: 1 })
   decimals = 1;
 
-  @Property({ columnType: 'bigserial', type: 'number' })
+  @Property()
   initSupply!: string;
 
   @Property()

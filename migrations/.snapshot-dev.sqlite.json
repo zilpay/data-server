@@ -62,11 +62,12 @@
         },
         "init_supply": {
           "name": "init_supply",
-          "type": "bigserial",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false
+          "nullable": false,
+          "mappedType": "text"
         },
         "name": {
           "name": "name",
@@ -92,7 +93,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "text"
         },
         "base_uri": {
@@ -101,7 +102,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "text"
         },
         "type": {

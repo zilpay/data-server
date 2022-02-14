@@ -10,7 +10,7 @@ export async function initORM() {
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],
     type: 'sqlite',
     dbName: 'dev.sqlite',
-    debug: false,
+    debug: true,
     allowGlobalContext: true
   });
   const migrator = orm.getMigrator();
@@ -19,4 +19,3 @@ export async function initORM() {
 
   return orm;
 }
-initORM();
