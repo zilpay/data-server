@@ -46,4 +46,26 @@ export class Token {
 
   @Enum(() => TokenTypes)
   type!: TokenTypes;
+
+  constructor(
+    bech32: string,
+    base16: string,
+    name: string,
+    symbol: string,
+    type: TokenTypes,
+    decimals = 1,
+    initSupply = BigInt(1),
+    contractOwner?: string,
+    baseUri?: string
+  ) {
+    this.base16 = base16;
+    this.bech32 = bech32;
+    this.name = name;
+    this.symbol = symbol;
+    this.type = type;
+    this.decimals = decimals;
+    this.initSupply = String(initSupply);
+    this.contractOwner = contractOwner;
+    this.baseUri = baseUri;
+  }
 }

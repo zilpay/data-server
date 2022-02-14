@@ -1,4 +1,3 @@
-import assert from "assert";
 import type { ScillaParam } from "types/rpc";
 
 import { TokenTypes } from '../config/token-types';
@@ -16,8 +15,13 @@ export function initParser(init: ScillaParam[]) {
   const contractOwner = findParam(init, 'initial_contract_owner') || findParam(init, 'contract_owner');
   const baseUri = findParam(init, 'initial_base_uri') || findParam(init, 'base_uri');
 
-  assert(Boolean(symbol), 'symbol is required param');
-  assert(Boolean(name), 'name is required param');
+  if (!symbol) {
+    throw new Error('symbol is required param');
+  }
+
+  if (typeof name === 'undefined') {
+    throw new Error('name is required param');
+  }
 
   if (decimals === 1) {
     type = TokenTypes.ZRC1;
