@@ -2,6 +2,7 @@
 // Import the express in typescript file
 import express from 'express';
 import { router } from './routers';
+import { initORM } from '../orm';
  
 // Initialize the express engine
 const app: express.Application = express();
@@ -16,9 +17,15 @@ app.use(router);
 app.get('/', (_req, _res) => {
   _res.send("TypeScript With Expresss");
 });
- 
-// Server setup
-app.listen(port, () => {
-  console.log(`TypeScript with Express
-        http://localhost:${port}/`);
-});
+
+(async function(){
+  const orm = await initORM();
+
+  app.set('orm', orm);
+
+  // Server setup
+  app.listen(port, () => {
+    console.log(`TypeScript with Express
+          http://localhost:${port}/`);
+  });
+}());
