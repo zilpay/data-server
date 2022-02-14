@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@mikro-orm/core": "^5.0.1",
+    "@mikro-orm/migrations": "^5.0.1",
     "@mikro-orm/sqlite": "^5.0.1",
     "@zilliqa-js/crypto": "^3.3.4",
     "cross-fetch": "^3.1.5",
