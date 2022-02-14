@@ -1,5 +1,5 @@
 import path from 'path';
-import { MikroORM, Utils } from "@mikro-orm/core";
+import { MikroORM } from "@mikro-orm/core";
 
 export async function initORM() {
   const orm = await MikroORM.init({

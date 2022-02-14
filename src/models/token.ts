@@ -38,10 +38,10 @@ export class Token {
   @Property()
   symbol!: string;
 
-  @Property()
-  contractOwner!: string;
+  @Property({ nullable: true })
+  contractOwner?: string;
 
-  @Property()
+  @Property({ nullable: true })
   baseUri?: string;
 
   @Enum(() => TokenTypes)
