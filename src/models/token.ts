@@ -2,8 +2,7 @@ import {
   Entity,
   Enum,
   PrimaryKey,
-  Property,
-  Unique
+  Property
 } from '@mikro-orm/core';
 import { TokenTypes } from '../config/token-types';
 
@@ -19,11 +18,9 @@ export class Token {
   updatedAt: Date = new Date();
 
   @Property()
-  @Unique()
   bech32!: string;
 
   @Property()
-  @Unique()
   base16!: string;
 
   @Property({ default: 1 })
