@@ -29,6 +29,6 @@ async function meta() {
   }
 }
 
-meta();
+// meta();
 
 setInterval(() => meta(), 1000000); /// 16.66666667 min
