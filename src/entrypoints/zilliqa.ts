@@ -6,13 +6,12 @@ import fetch from 'cross-fetch';
 import { RPCHttpProvider } from '../lib/rpc-provider';
 import { RPCMethod } from '../config/rpc-methods';
 import { tohexString } from '../utils/hex';
-import { getMeta } from './cryptometa';
 
 export class Zilliqa {
   #provider = new RPCHttpProvider();
   #http = 'https://api.zilliqa.com';
 
-  public async getInits(addresses: string[]) {
+  async getInits(addresses: string[]) {
     if (addresses.length === 0) {
       throw new Error('Addresses Array is empty');
     }
