@@ -1,6 +1,6 @@
 import { MikroORM, IDatabaseDriver, Connection, QueryOrder } from '@mikro-orm/core';
 import { Router, Request, Response } from 'express';
-import { TokenTypes } from '../config/token-types';
+import { TokenTypes } from '../../config/token-types';
 import { Token } from '../../models/token';
 import { authMiddleware } from '../middleware/auth';
 
