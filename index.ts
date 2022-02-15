@@ -14,9 +14,21 @@ config();
     console.log('already created database');
   }
   const migrator = orm.getMigrator();
-  await migrator.createInitialMigration();
-  await migrator.createMigration();
-  await migrator.up();
+  try {
+    await migrator.createInitialMigration();
+  } catch (err) {
+    console.log((err as Error).message);
+  }
+  try {
+    await migrator.createMigration();
+  } catch (err) {
+    console.log((err as Error).message);
+  }
+  try {
+    await migrator.up();
+  } catch (err) {
+    //
+  }
 
   orm.close();
 
