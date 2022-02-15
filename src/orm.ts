@@ -17,9 +17,9 @@ export async function initORM() {
     port: Number(process.env.PORT),
     host: 'localhost'
   });
-  // const generator = orm.getSchemaGenerator();
+  const generator = orm.getSchemaGenerator();
   const migrator = orm.getMigrator();
-  // await generator.createSchema();
+  await generator.createSchema();
   await migrator.createMigration();
   await migrator.up();  
 
