@@ -1,5 +1,8 @@
 import path from 'path';
+import { config } from 'dotenv';
 import { MikroORM } from "@mikro-orm/core";
+
+config();
 
 export async function initORM() {
   const orm = await MikroORM.init({
@@ -8,8 +11,8 @@ export async function initORM() {
     },
     entities: [path.join(__dirname, '/models')],
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],
-    type: 'sqlite',
-    dbName: 'dev.sqlite',
+    type: String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
+    dbName: String(process.env.DB_NAME),
     debug: false,
     allowGlobalContext: true
   });
