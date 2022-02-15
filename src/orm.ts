@@ -14,7 +14,8 @@ export async function initORM() {
     user: process.env.USER,
     debug: false,
     allowGlobalContext: true,
-    port: Number(process.env.PORT)
+    port: Number(process.env.PORT),
+    host: 'localhost'
   });
   const generator = orm.getSchemaGenerator();
   const migrator = orm.getMigrator();
