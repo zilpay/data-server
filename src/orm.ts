@@ -8,13 +8,13 @@ export async function initORM() {
     },
     entities: [path.join(__dirname, '/models')],
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],
-    type: 'sqlite',// String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
+    type: String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
     dbName: String(process.env.DB_NAME),
-    // password: process.env.PASSWORD,
-    // user: process.env.USER,
+    password: process.env.PASSWORD,
+    user: process.env.USER,
     debug: false,
     allowGlobalContext: true,
-    // port: Number(process.env.PORT)
+    port: Number(process.env.PORT)
   });
 
   return orm;
