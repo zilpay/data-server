@@ -1,7 +1,9 @@
 import { Worker } from 'worker_threads';
 import path from 'path';
 import { initORM } from './src/orm';
+import { config } from 'dotenv';
 
+config();
 (async function(){
   const orm = await initORM();
 
