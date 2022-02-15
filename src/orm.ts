@@ -18,6 +18,7 @@ export async function initORM() {
   });
   const generator = orm.getSchemaGenerator();
   const migrator = orm.getMigrator();
+  await generator.dropSchema();
   await generator.createSchema();
   await migrator.createMigration();
   await migrator.up();  
