@@ -7,6 +7,17 @@ config();
 (async function(){
   const orm = await initORM();
 
+  try {
+    const generator = orm.getSchemaGenerator();
+    await generator.createSchema();
+  } catch (err) {
+    console.log('already created database');
+  }
+  const migrator = orm.getMigrator();
+  await migrator.createInitialMigration();
+  await migrator.createMigration();
+  await migrator.up();
+
   orm.close();
 
   const updaterThread = new Worker(path.join(__dirname, './src/tasks/updater.js'));

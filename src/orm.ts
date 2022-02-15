@@ -8,7 +8,7 @@ export async function initORM() {
     },
     entities: [path.join(__dirname, '/models')],
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],
-    type: String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
+    type: 'sqlite',// String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
     dbName: String(process.env.DB_NAME),
     // password: process.env.PASSWORD,
     // user: process.env.USER,
@@ -16,15 +16,6 @@ export async function initORM() {
     allowGlobalContext: true,
     // port: Number(process.env.PORT)
   });
-  try {
-    const generator = orm.getSchemaGenerator();
-    await generator.createSchema();
-  } catch (err) {
-    console.log('already created database');
-  }
-  const migrator = orm.getMigrator();
-  await migrator.createMigration();
-  await migrator.up();
 
   return orm;
 }
