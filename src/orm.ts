@@ -10,12 +10,11 @@ export async function initORM() {
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],
     type: String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
     dbName: String(process.env.DB_NAME),
-    password: process.env.PASSWORD,
-    user: process.env.USER,
+    // password: process.env.PASSWORD,
+    // user: process.env.USER,
     debug: false,
     allowGlobalContext: true,
-    port: Number(process.env.PORT),
-    host: 'localhost'
+    // port: Number(process.env.PORT)
   });
   try {
     const generator = orm.getSchemaGenerator();
@@ -25,7 +24,7 @@ export async function initORM() {
   }
   const migrator = orm.getMigrator();
   await migrator.createMigration();
-  await migrator.up();  
+  await migrator.up();
 
   return orm;
 }
