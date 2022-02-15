@@ -17,9 +17,13 @@ export async function initORM() {
     port: Number(process.env.PORT),
     host: 'localhost'
   });
-  const generator = orm.getSchemaGenerator();
+  try {
+    const generator = orm.getSchemaGenerator();
+    await generator.createSchema();
+  } catch (err) {
+    console.log('already created database');
+  }
   const migrator = orm.getMigrator();
-  await generator.createSchema();
   await migrator.createMigration();
   await migrator.up();  
 
