@@ -64,16 +64,18 @@ tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => 
     }
 
     if (data && typeof data.scope !== 'undefined') {
-      token.scope = data.scope;
+      token.scope = Number(data.scope);
     }
     if (data && data.baseUri) {
       token.baseUri = data.baseUri;
     }
     if (data && typeof data.status !== 'undefined') {
-      token.status = data.status;
+      token.status = Number(data.status);
     }
 
     await orm.em.getRepository(Token).persistAndFlush([token]);
+
+    res.status(201).json(token);
   } catch (err) {
     res.status(500).json({
       code: 500,

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-const KEY = process.env.TOKEN || 'dev';
+const KEY = String(process.env.TOKEN);
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const token = String(req.headers.authorization);
