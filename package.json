@@ -19,6 +19,7 @@
     "@mikro-orm/sqlite": "^5.0.1",
     "@zilliqa-js/crypto": "^3.3.4",
     "body-parser": "^1.19.2",
+    "cors": "^2.8.5",
     "cross-fetch": "^3.1.5",
     "dddos": "^0.1.2",
     "express": "^4.17.2"

@@ -2,10 +2,13 @@
 // Import the express in typescript file
 import express from 'express';
 import bodyParser from 'body-parser';
+
 import { router } from './routers';
 import { initORM } from '../orm';
  
 const DDDoS = require('dddos');
+const cors = require("cors");
+
 // Initialize the express engine
 const app: express.Application = express();
  
@@ -15,6 +18,7 @@ const port: number = 3000;
 app.use(new DDDoS({
   /*Configuration options*/
 }).express('ip', 'path'));
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
