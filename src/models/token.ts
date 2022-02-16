@@ -4,6 +4,7 @@ import {
   PrimaryKey,
   Property
 } from '@mikro-orm/core';
+import { TokenStatus } from '../config/token-status';
 import { TokenTypes } from '../config/token-types';
 
 @Entity()
@@ -46,6 +47,9 @@ export class Token {
 
   @Enum(() => TokenTypes)
   type!: TokenTypes;
+
+  @Enum(() => TokenStatus)
+  status = TokenStatus.Enabled;
 
   constructor(
     bech32: string,

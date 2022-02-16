@@ -1,5 +1,6 @@
 import { MikroORM, IDatabaseDriver, Connection, QueryOrder } from '@mikro-orm/core';
 import { Router, Request, Response } from 'express';
+import { TokenStatus } from '../../config/token-status';
 import { TokenTypes } from '../../config/token-types';
 import { Token } from '../../models/token';
 import { authMiddleware } from '../middleware/auth';
@@ -12,7 +13,10 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
     const limit = Number(req.query.limit) || 10;
     const offset = Number(req.query.offset) || 0;
     const type = Number(req.query.type) || TokenTypes.ZRC1;
-    const [list, count] = await orm.em.getRepository(Token).findAndCount({ type }, {
+    const [list, count] = await orm.em.getRepository(Token).findAndCount({
+      type,
+      status: TokenStatus.Enabled
+    }, {
       limit,
       offset,
       orderBy: {
@@ -64,6 +68,9 @@ tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => 
     }
     if (data && data.baseUri) {
       token.baseUri = data.baseUri;
+    }
+    if (data && data.status) {
+      token.status = data.status;
     }
 
     await orm.em.getRepository(Token).persistAndFlush([token]);
