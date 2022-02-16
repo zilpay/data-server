@@ -12,7 +12,7 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
     const limit = Number(req.query.limit) || 10;
     const offset = Number(req.query.offset) || 0;
     const type = Number(req.query.type) || TokenTypes.ZRC1;
-    const list = await orm.em.getRepository(Token).find({ type }, {
+    const [list, count] = await orm.em.getRepository(Token).findAndCount({ type }, {
       limit,
       offset,
       orderBy: {
@@ -30,7 +30,10 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
       ]
     });
   
-    res.status(200).json(list);
+    res.status(200).json({
+      list,
+      count
+    });
   } catch (err) {
     res.status(500).json({
       code: 500,
