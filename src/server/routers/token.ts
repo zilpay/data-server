@@ -63,13 +63,13 @@ tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => 
       });
     }
 
-    if (data && data.scope) {
+    if (data && typeof data.scope !== 'undefined') {
       token.scope = data.scope;
     }
     if (data && data.baseUri) {
       token.baseUri = data.baseUri;
     }
-    if (data && data.status) {
+    if (data && typeof data.status !== 'undefined') {
       token.status = data.status;
     }
 
