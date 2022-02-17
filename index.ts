@@ -7,13 +7,14 @@ config();
 (async function(){
   const orm = await initORM();
 
-  try {
-    const generator = orm.getSchemaGenerator();
-    await generator.createSchema();
-  } catch (err) {
-    console.log('already created database');
-  }
+  // try {
+  //   const generator = orm.getSchemaGenerator();
+  //   await generator.createSchema();
+  // } catch (err) {
+  //   console.log('already created database');
+  // }
   const migrator = orm.getMigrator();
+
   try {
     await migrator.createInitialMigration();
   } catch (err) {
