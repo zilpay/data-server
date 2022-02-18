@@ -1,6 +1,6 @@
-import type { TxBlock, TxHashes } from './block';
+import type { TxBlockType, TxHashes } from './block';
 
 export interface WSResponse {
-  TxBlock: TxBlock;
+  TxBlock: TxBlockType;
   TxHashes: TxHashes;
 }

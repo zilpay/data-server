@@ -23,8 +23,6 @@ export function initParser(init: ScillaParam[]) {
     throw new Error('name is required param');
   }
 
-  console.log(decimals, symbol);
-
   if (isNaN(decimals)) {
     type = TokenTypes.ZRC1;
     decimals = 1;

@@ -21,7 +21,8 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
   async function updateState(tokens: Token[]) {
     for (const t of tokens) {
       try {
-        t.balances.removeAll();
+        // await t.balances.init()
+        // t.balances.removeAll();
         const states = await chain.getNFTState(t.base16);
         const owners = Object.keys(states);
   
@@ -38,7 +39,7 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
   
     console.log(tokens.map((t) => t.symbol), 'updated');
   }
-  
+
   async function update() {
     try {
       const list = await orm.em.getRepository(Token).find({
@@ -81,11 +82,17 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
     }
   }
 
-  ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
-    const block = new Block(data.TxBlock);
-    await orm.em.persistAndFlush(block);
-    await updateFromBlock(String(block.blockNum));
-  });
+  // ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
+  //   const block = new Block(data.TxBlock);
+  //   await orm.em.persistAndFlush(block);
+  //   try {
+  //     await updateFromBlock(String(data.TxBlock.header.BlockNum));
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // });
 
   setInterval(() => update(), 10000);
+
+  await update();
 }());

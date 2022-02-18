@@ -104,7 +104,11 @@ export class Zilliqa {
         [String(blockNumber)]
       ),
     ];
-    const [{ result }] = await this.#send(bach);
+    const [{ result, error }] = await this.#send(bach);
+
+    if (error) {
+      console.log(error);
+    }
   
     return result as TransactionType[];
   }
