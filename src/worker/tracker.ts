@@ -1,13 +1,19 @@
-import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
+import type { WSResponse } from 'types/ws';
 
-import { TokenTypes } from '../config/token-types';
+import { toChecksumAddress } from '@zilliqa-js/crypto';
+
 import { Token } from '../models/token';
 import { NFTState } from '../models/nft-state';
+import { Block } from '../models/block';
+
 import { initORM } from '../orm';
+import { TokenTypes } from '../config/token-types';
 import { Zilliqa } from '../entrypoints/zilliqa';
 import { TokenStatus } from '../config/token-status';
+import { WebSocketProvider, WSMessageTypes } from '../entrypoints/ws-provider';
 
 const chain = new Zilliqa();
+const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
 
 (async function(){
   const orm = await initORM();
@@ -49,6 +55,37 @@ const chain = new Zilliqa();
     }
   }
 
+  async function updateFromBlock(blockNumber: string) {
+    const list = await chain.getBlockBody(blockNumber);
+    const addrSet = new Set<string>();
+  
+    for (const tx of list) {
+      if (!tx.receipt.transitions) {
+        continue;
+      }
+  
+      for (const transition of tx.receipt.transitions) {
+        addrSet.add(toChecksumAddress(transition.addr));
+        addrSet.add(toChecksumAddress(transition.msg._recipient));
+      }
+    }
+    
+    const tokens = await orm.em.getRepository(Token).find({
+      status: TokenStatus.Enabled,
+      type: TokenTypes.ZRC1,
+      base16: Array.from(addrSet)
+    });
+  
+    if (tokens && tokens.length > 0) {
+      await updateState(tokens);
+    }
+  }
 
-  await update();
+  ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
+    const block = new Block(data.TxBlock);
+    await orm.em.persistAndFlush(block);
+    await updateFromBlock(String(block.blockNum));
+  });
+
+  setInterval(() => update(), 10000);
 }());

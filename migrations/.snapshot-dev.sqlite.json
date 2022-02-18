@@ -253,28 +253,35 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime",
+        "block_num": {
+          "name": "block_num",
+          "type": "integer",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
+          "mappedType": "integer"
         },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime",
+        "gas_limit": {
+          "name": "gas_limit",
+          "type": "integer",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
+          "mappedType": "integer"
         },
-        "num_dsblocks": {
-          "name": "num_dsblocks",
+        "gas_used": {
+          "name": "gas_used",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "mb_info_hash": {
+          "name": "mb_info_hash",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -282,8 +289,116 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "num_tx_blocks": {
-          "name": "num_tx_blocks",
+        "miner_pub_key": {
+          "name": "miner_pub_key",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "num_micro_blocks": {
+          "name": "num_micro_blocks",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "num_pages": {
+          "name": "num_pages",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "num_txns": {
+          "name": "num_txns",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "prev_block_hash": {
+          "name": "prev_block_hash",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "rewards": {
+          "name": "rewards",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "state_delta_hash": {
+          "name": "state_delta_hash",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "state_root_hash": {
+          "name": "state_root_hash",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "txn_fees": {
+          "name": "txn_fees",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "block_hash": {
+          "name": "block_hash",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "header_sign": {
+          "name": "header_sign",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -292,7 +407,7 @@
           "mappedType": "text"
         }
       },
-      "name": "blockchain",
+      "name": "block",
       "indexes": [
         {
           "keyName": "primary",

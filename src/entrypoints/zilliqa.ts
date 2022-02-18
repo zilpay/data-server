@@ -1,4 +1,5 @@
 import type { NFTState, RPCResponse } from 'types/rpc';
+import type { TransactionType } from 'types/transaction';
 
 import { fromBech32Address } from '@zilliqa-js/crypto';
 import fetch from 'cross-fetch';
@@ -94,6 +95,18 @@ export class Zilliqa {
     }
 
     return list;
+  }
+
+  async getBlockBody(blockNumber: string) {
+    const bach = [
+      this.#provider.buildBody(
+        RPCMethod.GetTxnBodiesForTxBlock,
+        [String(blockNumber)]
+      ),
+    ];
+    const [{ result }] = await this.#send(bach);
+  
+    return result as TransactionType[];
   }
 
   async #send(batch: object[]): Promise<RPCResponse[]> {
