@@ -32,3 +32,10 @@ export interface ScillaParam {
 export interface AddressInit {
   [key: string]: ScillaParam[] | null;
 };
+
+export interface NFTState {
+  [base16: string]: {
+    url: string;
+    id: string;
+  }[];
+}

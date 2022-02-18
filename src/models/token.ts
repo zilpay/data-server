@@ -1,11 +1,14 @@
 import {
+  Collection,
   Entity,
   Enum,
+  OneToMany,
   PrimaryKey,
   Property
 } from '@mikro-orm/core';
 import { TokenStatus } from '../config/token-status';
 import { TokenTypes } from '../config/token-types';
+import { NFTState } from './nft-state';
 
 @Entity()
 export class Token {
@@ -50,6 +53,9 @@ export class Token {
 
   @Enum(() => TokenStatus)
   status = TokenStatus.Enabled;
+
+  @OneToMany({ entity: () => NFTState, mappedBy: 'nft' })
+  balances = new Collection<NFTState>(this);
 
   constructor(
     bech32: string,

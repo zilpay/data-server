@@ -1,4 +1,4 @@
-import type { RPCResponse } from 'types/rpc';
+import type { NFTState, RPCResponse } from 'types/rpc';
 
 import { fromBech32Address } from '@zilliqa-js/crypto';
 import fetch from 'cross-fetch';
@@ -55,6 +55,47 @@ export class Zilliqa {
     return result;
   }
 
+  async getNFTState(address: string) {
+    const owners = 'token_owners';
+    const urls = 'token_uris';
+    const requests = [
+      this.#provider.buildBody(
+        RPCMethod.GetSmartContractSubState,
+        [tohexString(address), owners, []]
+      ),
+      this.#provider.buildBody(
+        RPCMethod.GetSmartContractSubState,
+        [tohexString(address), urls, []]
+      )
+    ];
+    let resList;
+    try {
+      resList = await this.#send(requests);
+    } catch {
+      return {};
+    }
+    const [ownersList, urlsList] = resList;
+    const urlsState = urlsList.result[urls];
+    const ownersState = ownersList.result[owners];
+    const list: NFTState = {};
+
+    for (const key in ownersState) {
+      const owner = ownersState[key];
+      const url = urlsState[key];
+
+      if (!Array.isArray(list[owner])) {
+        list[owner] = [];
+      }
+
+      list[owner].push({
+        url,
+        id: key
+      });
+    }
+
+    return list;
+  }
+
   async #send(batch: object[]): Promise<RPCResponse[]> {
     const res = await fetch(this.#http, {
       method: `POST`,
@@ -68,6 +109,8 @@ export class Zilliqa {
 }
 
 // const t = new Zilliqa();
+
+// t.getNFTState('0xb4d83becb950c096b001a3d1c7abb10f571ae75f');
 
 // getMeta().then((keys) => {
 //   return t.getInits(keys);

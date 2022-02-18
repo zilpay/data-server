@@ -10,7 +10,7 @@ export function initParser(init: ScillaParam[]) {
   let type = TokenTypes.ZRC2;
   const symbol = findParam(init, 'symbol');
   const name = findParam(init, 'name');
-  const decimals = Number(findParam(init, 'decimals')) || 1;
+  let decimals = Number(findParam(init, 'decimals'));
   const initSupply = BigInt(findParam(init, 'init_supply') || 0);
   const contractOwner = findParam(init, 'initial_contract_owner') || findParam(init, 'contract_owner');
   const baseUri = findParam(init, 'initial_base_uri') || findParam(init, 'base_uri');
@@ -23,12 +23,9 @@ export function initParser(init: ScillaParam[]) {
     throw new Error('name is required param');
   }
 
-  if (decimals === 1) {
+  if (isNaN(decimals)) {
     type = TokenTypes.ZRC1;
-  }
-
-  if (baseUri) {
-    type = TokenTypes.ZRC6;
+    decimals = 1;
   }
 
   return {

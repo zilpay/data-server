@@ -1,22 +1,10 @@
 import {
-  Embeddable,
-  Embedded,
   Entity,
+  ManyToOne,
   PrimaryKey,
   Property
 } from '@mikro-orm/core';
-
-@Embeddable()
-export class TokenState {
-  @Property()
-  id!: string;
-
-  @Property({ nullable: true })
-  metadata?: string;
-
-  @Property()
-  url!: string;
-}
+import { Token } from './token';
 
 @Entity()
 export class NFTState {
@@ -24,8 +12,27 @@ export class NFTState {
   id!: number;
 
   @Property()
+  tokenId!: string;
+
+  @Property()
   base16!: string;
 
-  @Embedded({ entity: () => TokenState, object: true })
-  state!: TokenState;
+  @Property({ nullable: true })
+  url?: string;
+
+  @Property({ type: 'json', nullable: true })
+  meta?: object;
+
+  @ManyToOne({
+    entity: () => Token
+  })
+  nft!: Token;
+
+  constructor(tokenId: string, url: string, base16: string, meta?: object) {
+    this.tokenId = tokenId;
+    this.url = url;
+    this.base16 = base16;
+    // this.nft = nft;
+    this.meta = meta;
+  }
 }
