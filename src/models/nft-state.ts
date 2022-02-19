@@ -8,8 +8,8 @@ import { Token } from './token';
 
 @Entity()
 export class NFTState {
-  @PrimaryKey()
-  id!: number;
+  @PrimaryKey({ type: 'uuid', defaultRaw: 'uuid_generate_v4()' })
+  uuid!: string;
 
   @Property()
   tokenId!: string;
