@@ -69,7 +69,8 @@ tokens.get('/nfts/:addr', async (req: Request, res: Response) => {
         'name',
         'symbol',
         'balances.tokenId',
-        'balances.url'
+        'balances.url',
+        'baseUri'
       ]
     });
   

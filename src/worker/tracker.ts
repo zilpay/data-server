@@ -95,12 +95,15 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
   ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
     const block = new Block(data.TxBlock);
     await orm.em.persistAndFlush(block);
-    log.info(`jsut created a new block`, block.blockNum);
-    try {
-      await updateFromBlock(String(block.blockNum));
-    } catch (err) {
-      log.error(`method updateFromBlock`, err);
-    }
+
+    setTimeout(async() => {
+      log.info(`jsut created a new block`, block.blockNum);
+      try {
+        await updateFromBlock(String(block.blockNum));
+      } catch (err) {
+        log.error(`method updateFromBlock`, err);
+      }
+    }, 5000);
   });
 
   await updateEmptys();

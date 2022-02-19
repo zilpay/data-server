@@ -101,6 +101,15 @@ export class Zilliqa {
       });
     }
 
+    if (Object.keys(list).length === 0) {
+      return {
+        ['0x0000000000000000000000000000000000000000']: [{
+          id: '0',
+          url: ''
+        }]
+      };
+    }
+
     return list;
   }
 
@@ -114,7 +123,7 @@ export class Zilliqa {
     const [{ result, error }] = await this.#send(bach);
 
     if (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   
     return result as TransactionType[];
