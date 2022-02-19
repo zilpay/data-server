@@ -29,6 +29,8 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
       nft: tokens
     });
     for (const t of tokens) {
+      await t.balances.init();
+      t.balances.removeAll();
       try {
         const states = await chain.getNFTState(t.base16);
         const owners = Object.keys(states);
@@ -41,7 +43,7 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
         log.error('updateState, tokens: ', tokens.map((t) => t.symbol).join(','), err);
       }
     }
-  
+
     await orm.em.persistAndFlush(tokens);
     log.info('state have just updated, tokens: ', tokens.map((t) => t.symbol).join(','));
   }
@@ -53,7 +55,7 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
         status: TokenStatus.Enabled,
         balances: null
       }, {
-        limit: 5
+        limit: 3
       });
   
       await updateState(list);
@@ -65,7 +67,7 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
   async function updateFromBlock(blockNumber: string) {
     const list = await chain.getBlockBody(blockNumber);
     const addrSet = new Set<string>();
-  
+
     for (const tx of list) {
       if (!tx.receipt.transitions) {
         continue;
@@ -84,7 +86,7 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
     });
 
     log.info(`tokens from block ${tokens.map((t) => t.symbol).join(',')}`);
-  
+
     if (tokens && tokens.length > 0) {
       await updateState(tokens);
     }
@@ -95,13 +97,13 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
     await orm.em.persistAndFlush(block);
     log.info(`jsut created a new block`, block.blockNum);
     try {
-      await updateFromBlock(String(block.blockNum - 1));
+      await updateFromBlock(String(block.blockNum));
     } catch (err) {
       log.error(`method updateFromBlock`, err);
     }
   });
 
-  setInterval(() => updateEmptys(), 10000);
-
   await updateEmptys();
+
+  setInterval(async() => await updateEmptys(), 50000);
 }());
