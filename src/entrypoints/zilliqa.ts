@@ -10,6 +10,7 @@ import { tohexString } from '../utils/hex';
 import { CryptoMetaResponse, getMeta } from './cryptometa';
 import { initParser } from '../utils/init-parse';
 import { Token } from '../models/token';
+import { TokenStatus } from '../config/token-status';
 
 export class Zilliqa {
   #provider = new RPCHttpProvider();
@@ -20,37 +21,47 @@ export class Zilliqa {
       throw new Error('meta Array is empty');
     }
   
-    const base16Addresses = metas.map(({ bech32 }) => fromBech32Address(bech32));
-    const requests = base16Addresses.map((address) => this.#provider.buildBody(
+    const baseURIField = 'base_uri';
+    const base16List = metas.map(({ bech32 }) => fromBech32Address(bech32));
+    const requestsInits = base16List.map((address) => this.#provider.buildBody(
       RPCMethod.GetSmartContractInit,
       [tohexString(address)]
     ));
-    const resList = await this.#send(requests);
+    const requestsUri = base16List.map((address) => this.#provider.buildBody(
+      RPCMethod.GetSmartContractSubState,
+      [tohexString(address), baseURIField, []]
+    ));
+    const initsList = await this.#send(requestsInits);
+    const baseURIList = await this.#send(requestsUri);
     const result: Token[] = [];
 
     for (let index = 0; index < metas.length; index++) {
       const { bech32, score } = metas[index];
-      const base16 = base16Addresses[index];
-      const res = resList[index];
+      const base16 = base16List[index];
+      const resInit = initsList[index].result;
+      let resUri = baseURIList[index].result;
 
-      try {
-        const init = initParser(res.result);
-        const token = new Token(
-          bech32,
-          base16,
-          init.name,
-          init.symbol,
-          init.type,
-          init.decimals,
-          score,
-          init.initSupply,
-          init.contractOwner,
-          init.baseUri
-        );
-        result.push(token);
-      } catch (err) {
-        console.error(err, bech32, JSON.stringify(res.result, null, 4));
+      if (resUri && resUri[baseURIField]) {
+        resUri = resUri[baseURIField];
       }
+
+      const init = initParser(resInit);
+      const token = new Token(
+        bech32,
+        base16,
+        init.name,
+        init.symbol,
+        init.type,
+        init.decimals,
+        score,
+        init.initSupply,
+        init.contractOwner,
+        init.baseUri || resUri
+      );
+      if (!init.name || !init.symbol) {
+        token.status = TokenStatus.Blocked;
+      }
+      result.push(token);
     }
 
     return result;
@@ -70,11 +81,7 @@ export class Zilliqa {
       )
     ];
     let resList;
-    try {
-      resList = await this.#send(requests);
-    } catch {
-      return {};
-    }
+    resList = await this.#send(requests);
     const [ownersList, urlsList] = resList;
     const urlsState = urlsList.result[urls];
     const ownersState = ownersList.result[owners];

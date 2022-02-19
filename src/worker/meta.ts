@@ -1,34 +1,42 @@
+import bunyan from 'bunyan';
+
 import { Token } from '../models/token';
-import { CryptoMetaResponse, getMeta } from '../entrypoints/cryptometa';
+import { getMeta } from '../entrypoints/cryptometa';
 import { Zilliqa } from '../entrypoints/zilliqa';
 import { initORM } from '../orm';
 
+const log = bunyan.createLogger({
+  name: "META_TASK"
+});
 const chain = new Zilliqa();
 
-async function meta() {
-  const list: CryptoMetaResponse[] = [];
-  try {
-    const orm = await initORM();
-    const bech32List = await getMeta();
+(async function() {
+  const orm = await initORM();
+  
+  async function meta() {
+    let list = await getMeta();
+    const exists = await orm.em.getRepository(Token).find({
+      bech32: list.map(({ bech32 }) => bech32)
+    }, {
+      fields: ['bech32']
+    });
+    list = list.filter(
+      (t) => !exists.some((e) => e.bech32 === t.bech32)
+    );
 
-    for (const meta of bech32List) {
-      const token = await orm.em.findOne(Token, {
-        bech32: meta.bech32
-      });
+    log.info(`Found ${list.length} tokens to add.`);
 
-      if (!token) {
-        list.push(meta);
-      }
+    if (list.length === 0) {
+      return;
     }
 
     const tokens = await chain.getInits(list);
-
     await orm.em.persistAndFlush(tokens);
-  } catch (err) {
-    console.error(err);
+
+    log.info(`Added ${tokens.length} tokens`);
   }
-}
 
-meta();
+  meta();
 
-setInterval(() => meta(), 1000000); /// 16.66666667 min
+  setInterval(() => meta(), 1000000); /// 16.66666667 min
+}());

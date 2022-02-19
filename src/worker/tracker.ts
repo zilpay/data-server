@@ -6,12 +6,17 @@ import { Token } from '../models/token';
 import { NFTState } from '../models/nft-state';
 import { Block } from '../models/block';
 
+import bunyan from 'bunyan';
+
 import { initORM } from '../orm';
 import { TokenTypes } from '../config/token-types';
 import { Zilliqa } from '../entrypoints/zilliqa';
 import { TokenStatus } from '../config/token-status';
 import { WebSocketProvider, WSMessageTypes } from '../entrypoints/ws-provider';
 
+const log = bunyan.createLogger({
+  name: "TRACK_TASK"
+});
 const chain = new Zilliqa();
 const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
 
@@ -19,40 +24,41 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
   const orm = await initORM();
 
   async function updateState(tokens: Token[]) {
+    log.info('start update state, tokens: ', tokens.map((t) => t.symbol).join(','));
+    await orm.em.getRepository(NFTState).nativeDelete({
+      nft: tokens
+    });
     for (const t of tokens) {
       try {
-        // await t.balances.init()
-        // t.balances.removeAll();
         const states = await chain.getNFTState(t.base16);
         const owners = Object.keys(states);
-  
+
         for (const onwer of owners) {
           const list = states[onwer].map((s) => new NFTState(s.id, s.url, onwer));
           t.balances.add(...list);
         }
       } catch (err) {
-        t.status = TokenStatus.Blocked;
+        log.error('updateState, tokens: ', tokens.map((t) => t.symbol).join(','), err);
       }
     }
   
     await orm.em.persistAndFlush(tokens);
-  
-    console.log(tokens.map((t) => t.symbol), 'updated');
+    log.info('state have just updated, tokens: ', tokens.map((t) => t.symbol).join(','));
   }
 
-  async function update() {
+  async function updateEmptys() {
     try {
       const list = await orm.em.getRepository(Token).find({
         type: TokenTypes.ZRC1,
         status: TokenStatus.Enabled,
         balances: null
       }, {
-        limit: 10
+        limit: 5
       });
   
       await updateState(list);
     } catch (err) {
-      console.error(err);
+      log.error('updateEmptys', err);
     }
   }
 
@@ -70,29 +76,32 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
         addrSet.add(toChecksumAddress(transition.msg._recipient));
       }
     }
-    
+
     const tokens = await orm.em.getRepository(Token).find({
       status: TokenStatus.Enabled,
       type: TokenTypes.ZRC1,
       base16: Array.from(addrSet)
     });
+
+    log.info(`tokens from block ${tokens.map((t) => t.symbol).join(',')}`);
   
     if (tokens && tokens.length > 0) {
       await updateState(tokens);
     }
   }
 
-  // ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
-  //   const block = new Block(data.TxBlock);
-  //   await orm.em.persistAndFlush(block);
-  //   try {
-  //     await updateFromBlock(String(data.TxBlock.header.BlockNum));
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // });
+  ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
+    const block = new Block(data.TxBlock);
+    await orm.em.persistAndFlush(block);
+    log.info(`jsut created a new block`, block.blockNum);
+    try {
+      await updateFromBlock(String(block.blockNum - 1));
+    } catch (err) {
+      log.error(`method updateFromBlock`, err);
+    }
+  });
 
-  setInterval(() => update(), 10000);
+  setInterval(() => updateEmptys(), 10000);
 
-  await update();
+  await updateEmptys();
 }());
