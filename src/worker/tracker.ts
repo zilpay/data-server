@@ -9,6 +9,7 @@ import { Block } from '../models/block';
 import bunyan from 'bunyan';
 
 import { initORM } from '../orm';
+import { sleep } from '../utils/sleep';
 import { TokenTypes } from '../config/token-types';
 import { Zilliqa } from '../entrypoints/zilliqa';
 import { TokenStatus } from '../config/token-status';
@@ -57,6 +58,10 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
       }, {
         limit: 3
       });
+
+      if (list.length === 0) {
+        await sleep(50000);
+      }
   
       await updateState(list);
     } catch (err) {
@@ -96,17 +101,17 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
     const block = new Block(data.TxBlock);
     await orm.em.persistAndFlush(block);
 
-    setTimeout(async() => {
-      log.info(`jsut created a new block`, block.blockNum);
-      try {
-        await updateFromBlock(String(block.blockNum));
-      } catch (err) {
-        log.error(`method updateFromBlock`, err);
-      }
-    }, 5000);
+    await sleep(5000);
+
+    log.info(`jsut created a new block`, block.blockNum);
+    try {
+      await updateFromBlock(String(block.blockNum));
+    } catch (err) {
+      log.error(`method updateFromBlock`, err);
+    }
   });
 
-  await updateEmptys();
-
-  setInterval(async() => await updateEmptys(), 50000);
+  while (true) {
+    await updateEmptys();
+  }
 }());

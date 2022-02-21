@@ -150,14 +150,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "mappedType": "integer"
+          "length": 36,
+          "mappedType": "text"
         },
         "token_id": {
           "name": "token_id",
@@ -219,7 +220,7 @@
         {
           "keyName": "primary",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "primary": true,

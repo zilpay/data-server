@@ -4,12 +4,13 @@ import {
   PrimaryKey,
   Property
 } from '@mikro-orm/core';
+import { v4 as uuidv4 } from 'uuid';
 import { Token } from './token';
 
 @Entity()
 export class NFTState {
-  @PrimaryKey({ type: 'uuid', defaultRaw: 'uuid_generate_v4()' })
-  uuid!: string;
+  @PrimaryKey({ type: 'uuid' })
+  uuid = uuidv4();
 
   @Property()
   tokenId!: string;
