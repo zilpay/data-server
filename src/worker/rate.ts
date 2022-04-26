@@ -169,7 +169,7 @@ const rates = [
         await orm.em.persistAndFlush(dataRates);
       }
 
-      log.info('finished update rates', zilliqa.usd);
+      log.info('finished update rates price', zilliqa.usd, 'usd');
     } catch (err) {
       log.error(err);
     }
