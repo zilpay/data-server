@@ -52,7 +52,7 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
 tokens.get('/dex/tokens', async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   try {
-    const limit = Number(req.query.limit) || 10;
+    const limit = Number(req.query.limit) || 100;
     const offset = Number(req.query.offset) || 0;
     const [list, count] = await orm.em.getRepository(Token).findAndCount({
       type: TokenTypes.ZRC2,
