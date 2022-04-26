@@ -48,6 +48,9 @@ export class Token {
   @Property()
   scope = 1;
 
+  @Property()
+  listed = false;
+
   @Enum(() => TokenTypes)
   type!: TokenTypes;
 

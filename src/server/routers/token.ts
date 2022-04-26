@@ -19,6 +19,7 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
       type,
       status: TokenStatus.Enabled
     }, {
+      cache: 5,
       limit,
       offset,
       orderBy: {
@@ -32,6 +33,44 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
         'type',
         'decimals',
         'baseUri',
+        'scope'
+      ]
+    });
+  
+    res.status(200).json({
+      list,
+      count
+    });
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      message: (err as Error).message
+    });
+  }
+});
+
+tokens.get('/dex/tokens', async (req: Request, res: Response) => {
+  const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
+  try {
+    const limit = Number(req.query.limit) || 10;
+    const offset = Number(req.query.offset) || 0;
+    const [list, count] = await orm.em.getRepository(Token).findAndCount({
+      type: TokenTypes.ZRC2,
+      status: TokenStatus.Enabled,
+      listed: true
+    }, {
+      cache: 5,
+      limit,
+      offset,
+      orderBy: {
+        scope: QueryOrder.DESC
+      },
+      fields: [
+        'base16',
+        'bech32',
+        'name',
+        'symbol',
+        'decimals',
         'scope'
       ]
     });
@@ -109,6 +148,9 @@ tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => 
     }
     if (data && typeof data.status !== 'undefined') {
       token.status = Number(data.status);
+    }
+    if (data && typeof data.listed !== 'undefined') {
+      token.listed = Boolean(data.listed);
     }
 
     await orm.em.getRepository(Token).persistAndFlush([token]);
