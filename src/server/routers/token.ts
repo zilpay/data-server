@@ -57,8 +57,9 @@ tokens.get('/nfts/:addr', async (req: Request, res: Response) => {
     const list = await orm.em.getRepository(Token).find({
       status,
       type,
+      // @ts-ignore
       balances: {
-        base16: addr.toLowerCase()
+        base16: String(addr).toLowerCase()
       }
     }, {
       populate: ['balances.url', 'balances.tokenId'],

@@ -1,7 +1,14 @@
-import { getCurrencyRate } from '../entrypoints/freecurrencyapi';
-import { getZILRate } from '../entrypoints/coingecko';
+import bunyan from 'bunyan';
 
+import { getZILRate } from '../entrypoints/coingecko';
+import { Rate } from '../models/rate';
+import { initORM } from '../orm';
+
+const log = bunyan.createLogger({
+  name: "RATE_TASK"
+});
 const rates = [
+  "USD",
   "JPY",
   "CNY",
   "CHF",
@@ -143,5 +150,33 @@ const rates = [
   "NZD"
 ];
 
+(async function(){
+  const orm = await initORM();
+  const rateRepository = orm.em.getRepository(Rate);
+  const count = await rateRepository.count();
 
-// getZILRate(rates).then(console.log);
+  async function updateRate() {
+    log.info('start update rates');
+    try {
+      const { zilliqa } = await getZILRate(rates);
+      const dataRates = new Rate(zilliqa);
+
+      if (count !== 0) {
+        await rateRepository.nativeUpdate({
+          id: count
+        }, dataRates);
+      } else {
+        await orm.em.persistAndFlush(dataRates);
+      }
+
+      log.info('finished update rates', zilliqa.usd);
+    } catch (err) {
+      log.error(err);
+    }
+  }
+
+  updateRate();
+
+  setInterval(() => updateRate(), 30000);
+}());
+

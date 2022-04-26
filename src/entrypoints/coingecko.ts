@@ -1,9 +1,9 @@
+import type { RateObject } from 'types/rate';
+
 import fetch from 'cross-fetch';
 
 export interface CoinGeckoResponse {
-  zilliqa: {
-    [currency: string]: number;
-  }
+  zilliqa: RateObject;
 }
 
 export async function getZILRate(currencies: string[]): Promise<CoinGeckoResponse> {

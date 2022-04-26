@@ -56,7 +56,7 @@ export class Zilliqa {
         score,
         init.initSupply,
         init.contractOwner,
-        init.baseUri || resUri
+        resUri
       );
       if (!init.name || !init.symbol) {
         token.status = TokenStatus.Blocked;

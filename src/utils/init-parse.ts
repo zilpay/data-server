@@ -13,7 +13,7 @@ export function initParser(init: ScillaParam[]) {
   let decimals = Number(findParam(init, 'decimals'));
   const initSupply = BigInt(findParam(init, 'init_supply') || 0);
   const contractOwner = findParam(init, 'initial_contract_owner') || findParam(init, 'contract_owner');
-  const baseUri = findParam(init, 'initial_base_uri') || findParam(init, 'base_uri');
+  const baseUri = findParam(init, 'initial_base_uri');
 
   if (isNaN(decimals)) {
     type = TokenTypes.ZRC1;
