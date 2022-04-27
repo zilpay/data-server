@@ -12,6 +12,7 @@ export const tokens = Router();
 tokens.get('/tokens', async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   try {
+    console.log('/tokens', new Date().toLocaleString());
     const limit = Number(req.query.limit) || 10;
     const offset = Number(req.query.offset) || 0;
     const type = Number(req.query.type) || TokenTypes.ZRC1;
@@ -52,6 +53,7 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
 tokens.get('/dex/tokens', async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   try {
+    console.log('/dex/tokens', new Date().toLocaleString());
     const limit = Number(req.query.limit) || 100;
     const offset = Number(req.query.offset) || 0;
     const [list, count] = await orm.em.getRepository(Token).findAndCount({
@@ -59,7 +61,7 @@ tokens.get('/dex/tokens', async (req: Request, res: Response) => {
       status: TokenStatus.Enabled,
       listed: true
     }, {
-      cache: 5,
+      cache: 10,
       limit,
       offset,
       orderBy: {

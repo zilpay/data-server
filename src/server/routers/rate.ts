@@ -9,6 +9,7 @@ ratesRoute.get('/rates', async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   const rateRepo = orm.em.getRepository(Rate);
   try {
+    console.log('rates', new Date().toLocaleString());
     const currency = req.query.currency ? String(req.query.currency).split(',') : undefined;
     const lastId = await rateRepo.count();
     const ratesData = await rateRepo.findOne({

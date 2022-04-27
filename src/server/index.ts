@@ -16,6 +16,10 @@ const app: express.Application = express();
 const port: number = 3000;
 
 app.use(new DDDoS({
+  regexp: ".*",
+  flags: "i",
+  maxWeight: 4,
+  queueSize: 4
   /*Configuration options*/
 }).express('ip', 'path'));
 app.use(cors());
