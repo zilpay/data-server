@@ -12,7 +12,6 @@ export const tokens = Router();
 tokens.get('/tokens', async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   try {
-    console.log('/tokens', new Date().toLocaleString());
     const limit = Number(req.query.limit) || 10;
     const offset = Number(req.query.offset) || 0;
     const type = Number(req.query.type) || TokenTypes.ZRC1;
