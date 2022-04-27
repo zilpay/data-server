@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import { router } from './routers';
 import { initORM } from '../orm';
  
-const DDDoS = require('dddos');
+// const DDDoS = require('dddos');
 const cors = require("cors");
 
 // Initialize the express engine
@@ -15,13 +15,13 @@ const app: express.Application = express();
 // Take a port 3000 for running server.
 const port: number = 3000;
 
-app.use(new DDDoS({
-  regexp: ".*",
-  flags: "i",
-  maxWeight: 4,
-  queueSize: 4
-  /*Configuration options*/
-}).express('ip', 'path'));
+// app.use(new DDDoS({
+//   regexp: ".*",
+//   flags: "i",
+//   maxWeight: 4,
+//   queueSize: 4
+//   /*Configuration options*/
+// }).express('ip', 'path'));
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
