@@ -15,9 +15,9 @@ const app: express.Application = express();
 // Take a port 3000 for running server.
 const port: number = 3000;
 
-app.use(new DDDoS({
-  queueSize: 4
-}).express('ip'));
+// app.use(new DDDoS({
+//   queueSize: 4
+// }).express('ip'));
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
