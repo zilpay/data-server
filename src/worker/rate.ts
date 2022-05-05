@@ -177,6 +177,6 @@ const rates = [
 
   updateRate();
 
-  setInterval(() => updateRate(), 30000);
+  setInterval(() => updateRate(), 10000);
 }());
 
