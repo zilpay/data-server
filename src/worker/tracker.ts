@@ -2,76 +2,31 @@ import type { WSResponse } from 'types/ws';
 
 import { toChecksumAddress } from '@zilliqa-js/crypto';
 
-import { Token } from '../models/token';
-import { NFTState } from '../models/nft-state';
 import { Block } from '../models/block';
 
 import bunyan from 'bunyan';
 
 import { initORM } from '../orm';
 import { sleep } from '../utils/sleep';
-import { TokenTypes } from '../config/token-types';
 import { Zilliqa } from '../entrypoints/zilliqa';
-import { TokenStatus } from '../config/token-status';
 import { WebSocketProvider, WSMessageTypes } from '../entrypoints/ws-provider';
+import { DEX } from '../config/dex';
 
 const log = bunyan.createLogger({
   name: "TRACK_TASK"
 });
-const chain = new Zilliqa();
-const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
+const chain = new Zilliqa('https://dev-api.zilliqa.com');
+const ws = new WebSocketProvider('wss://dev-api-ws.zilliqa.com');
 
 (async function(){
+  let latestBlockNumber = 0;
   const orm = await initORM();
-
-  async function updateState(tokens: Token[]) {
-    log.info('start update state, tokens: ', tokens.map((t) => t.symbol).join(','));
-    await orm.em.getRepository(NFTState).nativeDelete({
-      nft: tokens
-    });
-    for (const t of tokens) {
-      await t.balances.init();
-      t.balances.removeAll();
-      try {
-        const states = await chain.getNFTState(t.base16);
-        const owners = Object.keys(states);
-
-        for (const onwer of owners) {
-          const list = states[onwer].map((s) => new NFTState(s.id, s.url, onwer));
-          t.balances.add(...list);
-        }
-      } catch (err) {
-        log.error('updateState, tokens: ', tokens.map((t) => t.symbol).join(','), err);
-      }
-    }
-
-    await orm.em.persistAndFlush(tokens);
-    log.info('state have just updated, tokens: ', tokens.map((t) => t.symbol).join(','));
-  }
-
-  async function updateEmptys() {
-    try {
-      const list = await orm.em.getRepository(Token).find({
-        type: TokenTypes.ZRC1,
-        status: TokenStatus.Enabled,
-        balances: null
-      }, {
-        limit: 3
-      });
-
-      if (list.length === 0) {
-        await sleep(50000);
-      }
-  
-      await updateState(list);
-    } catch (err) {
-      log.error('updateEmptys', err);
-    }
-  }
 
   async function updateFromBlock(blockNumber: string) {
     const list = await chain.getBlockBody(blockNumber);
     const addrSet = new Set<string>();
+
+    console.log(list);
 
     for (const tx of list) {
       if (!tx.receipt.transitions) {
@@ -84,34 +39,36 @@ const ws = new WebSocketProvider('wss://api-ws.zilliqa.com');
       }
     }
 
-    const tokens = await orm.em.getRepository(Token).find({
-      status: TokenStatus.Enabled,
-      type: TokenTypes.ZRC1,
-      base16: Array.from(addrSet)
-    });
-
-    log.info(`tokens from block ${tokens.map((t) => t.symbol).join(',')}`);
-
-    if (tokens && tokens.length > 0) {
-      await updateState(tokens);
+    if (addrSet.has(DEX)) {
+      console.log(Array.from(addrSet));
     }
   }
 
-  ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
-    const block = new Block(data.TxBlock);
-    await orm.em.persistAndFlush(block);
+  // ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
+  //   const block = new Block(data.TxBlock);
+  //   await orm.em.persistAndFlush(block);
 
-    await sleep(5000);
+  //   await sleep(5000);
 
-    log.info(`jsut created a new block`, block.blockNum);
-    try {
-      await updateFromBlock(String(block.blockNum));
-    } catch (err) {
-      log.error(`method updateFromBlock`, err);
+  //   log.info(`jsut created a new block`, block.blockNum);
+  //   try {
+  //     await updateFromBlock(String(block.blockNum));
+  //   } catch (err) {
+  //     log.error(`method updateFromBlock`, err);
+  //   }
+  // });
+
+  setInterval(async() => {
+    const block = await chain.getLatestBlock();
+
+    if (latestBlockNumber < Number(block.header.BlockNum)) {
+      latestBlockNumber = Number(block.header.BlockNum);
+
+      try {
+        await updateFromBlock(block.header.BlockNum);
+      } catch (err) {
+        log.warn((err as Error).message);
+      }
     }
-  });
-
-  while (true) {
-    await updateEmptys();
-  }
+  }, 5000);
 }());

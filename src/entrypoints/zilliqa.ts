@@ -1,5 +1,6 @@
 import type { NFTState, RPCResponse } from 'types/rpc';
 import type { TransactionType } from 'types/transaction';
+import type { TxBlockType } from 'types/block';
 
 import { fromBech32Address } from '@zilliqa-js/crypto';
 import fetch from 'cross-fetch';
@@ -14,7 +15,11 @@ import { TokenStatus } from '../config/token-status';
 
 export class Zilliqa {
   #provider = new RPCHttpProvider();
-  #http = 'https://api.zilliqa.com';
+  #http: string;
+
+  constructor(http = 'https://api.zilliqa.com') {
+    this.#http = http;
+  }
 
   async getInits(metas: CryptoMetaResponse[]) {
     if (metas.length === 0) {
@@ -127,6 +132,22 @@ export class Zilliqa {
     }
   
     return result as TransactionType[];
+  }
+
+  async getLatestBlock() {
+    const bach = [
+      this.#provider.buildBody(
+        RPCMethod.GetLatestTxBlock,
+        []
+      ),
+    ];
+    const [{ result, error }] = await this.#send(bach);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return result as TxBlockType;
   }
 
   async #send(batch: object[]): Promise<RPCResponse[]> {
