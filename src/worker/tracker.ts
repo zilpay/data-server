@@ -1,74 +1,44 @@
 import type { WSResponse } from 'types/ws';
 
-import { toChecksumAddress } from '@zilliqa-js/crypto';
-
-import { Block } from '../models/block';
-
 import bunyan from 'bunyan';
 
 import { initORM } from '../orm';
-import { sleep } from '../utils/sleep';
 import { Zilliqa } from '../entrypoints/zilliqa';
-import { WebSocketProvider, WSMessageTypes } from '../entrypoints/ws-provider';
+// import { WebSocketProvider, WSMessageTypes } from '../entrypoints/ws-provider';
 import { DEX } from '../config/dex';
+import { Token } from '../models/token';
 
 const log = bunyan.createLogger({
   name: "TRACK_TASK"
 });
 const chain = new Zilliqa('https://dev-api.zilliqa.com');
-const ws = new WebSocketProvider('wss://dev-api-ws.zilliqa.com');
+// const ws = new WebSocketProvider('wss://dev-api-ws.zilliqa.com');
 
 (async function(){
   let latestBlockNumber = 0;
   const orm = await initORM();
+  const tokenRepo = orm.em.getRepository(Token);
 
-  async function updateFromBlock(blockNumber: string) {
-    const list = await chain.getBlockBody(blockNumber);
-    const addrSet = new Set<string>();
+  async function update() {
+    const tokens = Object.keys(await chain.getContributions(DEX));
 
-    console.log(list);
-
-    for (const tx of list) {
-      if (!tx.receipt.transitions) {
-        continue;
-      }
+    const notListedTokens = await tokenRepo.find({
+      base16: tokens,
+      listed: false
+    });
   
-      for (const transition of tx.receipt.transitions) {
-        addrSet.add(toChecksumAddress(transition.addr));
-        addrSet.add(toChecksumAddress(transition.msg._recipient));
-      }
+    for (const token of notListedTokens) {
+      token.listed = true;
     }
+  
+    await tokenRepo.persistAndFlush(notListedTokens);
 
-    if (addrSet.has(DEX)) {
-      console.log(Array.from(addrSet));
-    }
+    log.info('updated', notListedTokens.length);
   }
 
-  // ws.on(WSMessageTypes.NewBlock, async(data: WSResponse) => {
-  //   const block = new Block(data.TxBlock);
-  //   await orm.em.persistAndFlush(block);
+  await update();
 
-  //   await sleep(5000);
-
-  //   log.info(`jsut created a new block`, block.blockNum);
-  //   try {
-  //     await updateFromBlock(String(block.blockNum));
-  //   } catch (err) {
-  //     log.error(`method updateFromBlock`, err);
-  //   }
-  // });
-
-  setInterval(async() => {
-    const block = await chain.getLatestBlock();
-
-    if (latestBlockNumber < Number(block.header.BlockNum)) {
-      latestBlockNumber = Number(block.header.BlockNum);
-
-      try {
-        await updateFromBlock(block.header.BlockNum);
-      } catch (err) {
-        log.warn((err as Error).message);
-      }
-    }
-  }, 5000);
+  setInterval(() => {
+    update();
+  }, 50000);
 }());
