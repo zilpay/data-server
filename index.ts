@@ -28,7 +28,7 @@ config();
   try {
     await migrator.up();
   } catch (err) {
-    //
+    console.log((err as Error).message);
   }
 
   orm.close();
