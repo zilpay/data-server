@@ -15,7 +15,6 @@ const chain = new Zilliqa('https://dev-api.zilliqa.com');
 // const ws = new WebSocketProvider('wss://dev-api-ws.zilliqa.com');
 
 (async function(){
-  let latestBlockNumber = 0;
   const orm = await initORM();
   const tokenRepo = orm.em.getRepository(Token);
 
@@ -33,7 +32,7 @@ const chain = new Zilliqa('https://dev-api.zilliqa.com');
   
     await tokenRepo.persistAndFlush(notListedTokens);
 
-    log.info('updated', notListedTokens.length);
+    log.info('updated', notListedTokens.map((t) => t.symbol).join(', '));
   }
 
   await update();
