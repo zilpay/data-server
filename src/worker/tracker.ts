@@ -21,6 +21,8 @@ const chain = new Zilliqa('https://dev-api.zilliqa.com');
   async function update() {
     const tokens = Object.keys(await chain.getContributions(DEX));
 
+    console.log(tokens);
+
     const notListedTokens = await tokenRepo.find({
       base16: tokens,
       listed: false
