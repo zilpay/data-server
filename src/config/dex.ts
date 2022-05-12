@@ -1,3 +1,3 @@
 import { toChecksumAddress } from "@zilliqa-js/crypto";
 
-export const DEX = toChecksumAddress('0xe21c558bb39054f1d6be9aa5723c0e49267d8446');
+export const DEX = toChecksumAddress('0x45a266fa784a9f2955fee237589c2a48c0e08132');
