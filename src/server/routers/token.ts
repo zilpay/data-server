@@ -153,6 +153,16 @@ tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => 
     if (data && typeof data.listed !== 'undefined') {
       token.listed = Boolean(data.listed);
     }
+    if (data && typeof data.base16 !== 'undefined') {
+      token.base16 = String(data.base16);
+      token.bech32 = String(data.bech32);
+    }
+    if (data && typeof data.name !== 'undefined') {
+      token.name = String(data.name);
+    }
+    if (data && typeof data.symbol !== 'undefined') {
+      token.symbol = String(data.symbol);
+    }
 
     await orm.em.getRepository(Token).persistAndFlush([token]);
 
