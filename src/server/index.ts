@@ -13,7 +13,7 @@ const cors = require("cors");
 const app: express.Application = express();
  
 // Take a port 3000 for running server.
-const port: number = 5000;
+const port: number = 4000;
 
 // app.use(new DDDoS({
 //   queueSize: 4
