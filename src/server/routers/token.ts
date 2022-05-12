@@ -162,6 +162,9 @@ tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => 
     if (data && typeof data.symbol !== 'undefined') {
       token.symbol = String(data.symbol);
     }
+    if (data && typeof data.decimals !== 'undefined') {
+      token.decimals = Number(data.decimals);
+    }
 
     await orm.em.getRepository(Token).persistAndFlush([token]);
 
