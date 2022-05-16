@@ -49,44 +49,6 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
   }
 });
 
-tokens.get('/dex/tokens', async (req: Request, res: Response) => {
-  const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
-  try {
-    const limit = Number(req.query.limit) || 100;
-    const offset = Number(req.query.offset) || 0;
-    const [list, count] = await orm.em.getRepository(Token).findAndCount({
-      type: TokenTypes.ZRC2,
-      status: TokenStatus.Enabled,
-      listed: true
-    }, {
-      cache: 10,
-      limit,
-      offset,
-      orderBy: {
-        scope: QueryOrder.DESC
-      },
-      fields: [
-        'base16',
-        'bech32',
-        'name',
-        'symbol',
-        'decimals',
-        'scope'
-      ]
-    });
-  
-    res.status(200).json({
-      list,
-      count
-    });
-  } catch (err) {
-    res.status(500).json({
-      code: 500,
-      message: (err as Error).message
-    });
-  }
-});
-
 tokens.get('/nfts/:addr', async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   const status = TokenStatus.Enabled;
