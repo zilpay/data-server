@@ -150,6 +150,23 @@ export class Zilliqa {
     return result as TxBlockType;
   }
 
+  async getPools(contract: string) {
+    const field = 'pools';
+    const bach = [
+      this.#provider.buildBody(
+        RPCMethod.GetSmartContractSubState,
+        [tohexString(contract), field, []]
+      )
+    ];
+    const [{ result, error }] = await this.#send(bach);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return result[field];
+  }
+
   async getContributions(contract: string) {
     const field = 'total_contributions';
     const bach = [
