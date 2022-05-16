@@ -7,9 +7,18 @@ import { TokenStatus } from '../../config/token-status';
 import { TokenTypes } from '../../config/token-types';
 import { Token } from '../../models/token';
 import { Rate } from '../../models/rate';
+import { ZERO_BECH32, ZERO_ADDR } from '../../config/conts';
 
 export const dex = Router();
 
+const ZILLIQA_TOKEN = {
+  bech32: ZERO_BECH32,
+  base16: ZERO_ADDR,
+  decimals: 12,
+  symbol: 'ZIL',
+  name: 'Zilliqa',
+  scope: 100
+};
 const cachePath = path.join(__dirname, '../../cache/pools.json');
 let pools = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
 
@@ -53,7 +62,10 @@ dex.get('/dex', async (req: Request, res: Response) => {
 
     res.status(200).json({
       tokens: {
-        list,
+        list: [
+          ZILLIQA_TOKEN,
+          ...list
+        ],
         count
       },
       pools,
