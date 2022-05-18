@@ -6,6 +6,9 @@ export async function initORM() {
     migrations: {
       path: path.join(__dirname, '../migrations'),
     },
+    cache: {
+      enabled: false
+    },
     entities: [path.join(__dirname, '/models')],
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],
     type: String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
