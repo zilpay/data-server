@@ -42,10 +42,10 @@ export class Token {
   @Property({ nullable: true })
   baseUri?: string;
 
-  @Property()
+  @Property({ type: 'integer' })
   scope = 1;
 
-  @Property({ type: 'boolean'})
+  @Property({ type: 'boolean' })
   listed = false;
 
   @Enum(() => TokenTypes)
