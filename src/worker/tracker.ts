@@ -6,16 +6,14 @@ import path from 'path';
 
 import { initORM } from '../orm';
 import { Zilliqa } from '../entrypoints/zilliqa';
-// import { WebSocketProvider, WSMessageTypes } from '../entrypoints/ws-provider';
 import { DEX } from '../config/dex';
 import { Token } from '../models/token';
-import { toChecksumAddress } from '@zilliqa-js/crypto';
+import { TokenStatus } from '../config/token-status';
 
 const log = bunyan.createLogger({
   name: "TRACK_TASK"
 });
 const chain = new Zilliqa();
-// const ws = new WebSocketProvider('wss://dev-api-ws.zilliqa.com');
 
 (async function(){
   const orm = await initORM();
@@ -42,7 +40,11 @@ const chain = new Zilliqa();
 
     const notListedTokens = await tokenRepo.find({
       base16: tokens,
-      listed: false
+      listed: false,
+      status: TokenStatus.Enabled,
+      scope: {
+        $gt: 1
+      }
     });
 
     for (const token of notListedTokens) {

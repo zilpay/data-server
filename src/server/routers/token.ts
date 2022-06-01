@@ -17,7 +17,10 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
     const type = Number(req.query.type) || TokenTypes.ZRC1;
     const [list, count] = await orm.em.getRepository(Token).findAndCount({
       type,
-      status: TokenStatus.Enabled
+      status: TokenStatus.Enabled,
+      scope: {
+        $gt: 1
+      }
     }, {
       cache: 5,
       limit,
