@@ -51,6 +51,7 @@ dex.get('/dex', async (req: Request, res: Response) => {
       ]
     });
     const lastId = await rateRepo.count();
+    console.log(lastId);
     const ratesData = await rateRepo.findOne({
       id: lastId
     }, {
@@ -59,6 +60,8 @@ dex.get('/dex', async (req: Request, res: Response) => {
         'usd'
       ]
     });
+
+    console.log(ratesData);
 
     res.status(200).json({
       tokens: {
