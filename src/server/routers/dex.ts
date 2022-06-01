@@ -51,7 +51,6 @@ dex.get('/dex', async (req: Request, res: Response) => {
       ]
     });
     const lastId = await rateRepo.count();
-    console.log(lastId);
     const ratesData = await rateRepo.findOne({
       id: lastId
     }, {
