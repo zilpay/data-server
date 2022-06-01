@@ -9,6 +9,7 @@ import { Zilliqa } from '../entrypoints/zilliqa';
 // import { WebSocketProvider, WSMessageTypes } from '../entrypoints/ws-provider';
 import { DEX } from '../config/dex';
 import { Token } from '../models/token';
+import { toChecksumAddress } from '@zilliqa-js/crypto';
 
 const log = bunyan.createLogger({
   name: "TRACK_TASK"
@@ -22,7 +23,7 @@ const chain = new Zilliqa();
 
   async function update() {
     const pools = await chain.getPools(DEX);
-    const tokens = Object.keys(pools);
+    let tokens = Object.keys(pools);
 
     const foundTokens = await tokenRepo.find({
       base16: tokens
@@ -39,16 +40,17 @@ const chain = new Zilliqa();
       log.error('cahce JSON file', err);
     }
 
-    // const notListedTokens = await tokenRepo.find({
-    //   base16: tokens,
-    //   listed: false
-    // });
-  
-    // for (const token of notListedTokens) {
-    //   token.listed = true;
-    // }
+    tokens = tokens.map((addr) => toChecksumAddress(addr));
+    const notListedTokens = await tokenRepo.find({
+      base16: tokens,
+      listed: false
+    });
 
-    // await tokenRepo.persistAndFlush(notListedTokens);
+    for (const token of notListedTokens) {
+      token.listed = true;
+    }
+
+    await tokenRepo.persistAndFlush(notListedTokens);
 
     log.info('updated', foundTokens.map((t) => t.symbol).join(', '));
   }
