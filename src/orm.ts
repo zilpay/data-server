@@ -16,7 +16,7 @@ export async function initORM() {
     dbName: String(process.env.DB_NAME),
     password: process.env.PASSWORD,
     user: process.env.DB_USER,
-    debug: true,
+    debug: false,
     allowGlobalContext: true,
     port: Number(process.env.PORT)
   });
