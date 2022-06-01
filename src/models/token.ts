@@ -45,7 +45,7 @@ export class Token {
   @Property()
   scope = 1;
 
-  @Property()
+  @Property({ type: 'boolean'})
   listed = false;
 
   @Enum(() => TokenTypes)
