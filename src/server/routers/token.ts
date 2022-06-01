@@ -95,6 +95,8 @@ tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => 
       id
     });
 
+    console.log(token);
+
     if (!token) {
       return res.status(204).json({
         code: 204,
