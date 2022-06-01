@@ -10,142 +10,142 @@ export class Rate {
   @PrimaryKey()
   id!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   usd!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   jpy!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   cny!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   chf!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   cad!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   mxn!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   inr!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   brl!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   rub!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   krw!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   idr!: number;
   
-  @Property()
+  @Property({ type: 'flaot' })
   try!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   sar!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   sek!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   ngn!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   pln!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   ars!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   nok!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   twd!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   aed!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   thb!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   zar!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   dkk!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   myr!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   sgd!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   ils!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   hkd!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   php!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   clp!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   pkr!: number;
   
-  @Property()
+  @Property({ type: 'flaot' })
   czk!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   vnd!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   bdt!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   huf!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   uah!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   lkr!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   mmk!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   bhd!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   btc!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   xrp!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   aud!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   gbp!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   eth!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   eur!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   ltc!: number;
 
-  @Property()
+  @Property({ type: 'flaot' })
   nzd!: number;
 
   constructor(data: RateObject) {
