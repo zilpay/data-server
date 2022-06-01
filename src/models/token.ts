@@ -24,7 +24,7 @@ export class Token {
   @Property()
   base16!: string;
 
-  @Property({ default: 1 })
+  @Property({ default: 1, type: 'integer' })
   decimals = 1;
 
   @Property()
