@@ -52,13 +52,13 @@
         },
         "decimals": {
           "name": "decimals",
-          "type": "json",
+          "type": "integer",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "default": "1",
-          "mappedType": "json"
+          "mappedType": "integer"
         },
         "init_supply": {
           "name": "init_supply",
@@ -107,21 +107,21 @@
         },
         "scope": {
           "name": "scope",
-          "type": "json",
+          "type": "integer",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "mappedType": "integer"
         },
         "listed": {
           "name": "listed",
-          "type": "json",
+          "type": "integer",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "mappedType": "integer"
         },
         "type": {
           "name": "type",

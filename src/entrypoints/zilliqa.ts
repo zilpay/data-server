@@ -42,7 +42,7 @@ export class Zilliqa {
 
     for (let index = 0; index < metas.length; index++) {
       const { bech32, score } = metas[index];
-      const base16 = base16List[index];
+      const base16 = String(base16List[index]).toLowerCase();
       const resInit = initsList[index].result;
       let resUri = baseURIList[index].result;
 

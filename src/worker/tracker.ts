@@ -23,7 +23,7 @@ const chain = new Zilliqa();
 
   async function update() {
     const pools = await chain.getPools(DEX);
-    let tokens = Object.keys(pools);
+    const tokens = Object.keys(pools);
 
     const foundTokens = await tokenRepo.find({
       base16: tokens
@@ -40,7 +40,6 @@ const chain = new Zilliqa();
       log.error('cahce JSON file', err);
     }
 
-    tokens = tokens.map((addr) => toChecksumAddress(addr));
     const notListedTokens = await tokenRepo.find({
       base16: tokens,
       listed: false
