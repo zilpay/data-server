@@ -11,6 +11,7 @@ ratesRoute.get('/rates', async (req: Request, res: Response) => {
   try {
     const currency = req.query.currency ? String(req.query.currency).split(',') : undefined;
     const lastId = await rateRepo.count();
+    console.log(lastId);
     const ratesData = await rateRepo.findOne({
       id: lastId
     }, {
