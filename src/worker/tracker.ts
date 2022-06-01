@@ -53,7 +53,7 @@ const chain = new Zilliqa();
 
     await tokenRepo.persistAndFlush(notListedTokens);
 
-    log.info('updated', foundTokens.map((t) => t.symbol).join(', '));
+    log.info('updated', notListedTokens.map((t) => t.symbol).join(', '));
   }
 
   await update();
