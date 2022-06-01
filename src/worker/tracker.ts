@@ -13,7 +13,7 @@ import { Token } from '../models/token';
 const log = bunyan.createLogger({
   name: "TRACK_TASK"
 });
-const chain = new Zilliqa('https://dev-api.zilliqa.com');
+const chain = new Zilliqa();
 // const ws = new WebSocketProvider('wss://dev-api-ws.zilliqa.com');
 
 (async function(){
@@ -39,18 +39,18 @@ const chain = new Zilliqa('https://dev-api.zilliqa.com');
       log.error('cahce JSON file', err);
     }
 
-    const notListedTokens = await tokenRepo.find({
-      base16: tokens,
-      listed: false
-    });
+    // const notListedTokens = await tokenRepo.find({
+    //   base16: tokens,
+    //   listed: false
+    // });
   
-    for (const token of notListedTokens) {
-      token.listed = true;
-    }
+    // for (const token of notListedTokens) {
+    //   token.listed = true;
+    // }
 
-    await tokenRepo.persistAndFlush(notListedTokens);
+    // await tokenRepo.persistAndFlush(notListedTokens);
 
-    log.info('updated', notListedTokens.map((t) => t.symbol).join(', '));
+    log.info('updated', foundTokens.map((t) => t.symbol).join(', '));
   }
 
   await update();
