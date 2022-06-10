@@ -161,13 +161,7 @@ const rates = [
       const { zilliqa } = await getZILRate(rates);
       const dataRates = new Rate(zilliqa);
 
-      if (count !== 0) {
-        await rateRepository.nativeUpdate({
-          id: count
-        }, dataRates);
-      } else {
-        await orm.em.persistAndFlush(dataRates);
-      }
+      await orm.em.persistAndFlush(dataRates);
 
       log.info('finished update rates price', zilliqa.usd, 'usd');
     } catch (err) {
@@ -177,6 +171,6 @@ const rates = [
 
   updateRate();
 
-  setInterval(() => updateRate(), 10000);
+  setInterval(() => updateRate(), 120000);
 }());
 

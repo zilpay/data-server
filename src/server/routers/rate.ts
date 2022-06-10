@@ -14,10 +14,10 @@ ratesRoute.get('/rates', async (req: Request, res: Response) => {
     const ratesData = await rateRepo.findOne({
       id: lastId
     }, {
-      cache: 5,
+      cache: 1000,
       fields: currency as any
     });
-  
+
     res.status(200).json(ratesData);
   } catch (err) {
     res.status(500).json({

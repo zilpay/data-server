@@ -10,6 +10,9 @@ export async function initORM() {
     cache: {
       enabled: false
     },
+    resultCache: {
+      expiration: 1000
+    },
     entities: [path.join(__dirname, '/models')],
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],
     type: String(process.env.TYPE) as "mongo" | "mysql" | "mariadb" | "postgresql" | "sqlite",
