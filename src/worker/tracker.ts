@@ -56,9 +56,17 @@ const chain = new Zilliqa();
     log.info('updated', notListedTokens.map((t) => t.symbol).join(', '));
   }
 
-  await update();
+  try {
+    await update();
+  } catch (err) {
+    log.error('update', err);
+  }
 
-  setInterval(() => {
-    update();
+  setInterval(async() => {
+    try {
+      await update();
+    } catch (err) {
+      log.error('update', err);
+    }
   }, 30000);
 }());
