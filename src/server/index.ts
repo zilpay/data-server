@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import { router } from './routers';
 import { initORM } from '../orm';
  
-// const cors = require("cors");
+const cors = require("cors");
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -14,7 +14,7 @@ const app: express.Application = express();
 // Take a port 3000 for running server.
 const port: number = 4000;
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
