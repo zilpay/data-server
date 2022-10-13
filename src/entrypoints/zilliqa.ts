@@ -8,10 +8,11 @@ import fetch from 'cross-fetch';
 import { RPCHttpProvider } from '../lib/rpc-provider';
 import { RPCMethod } from '../config/rpc-methods';
 import { tohexString } from '../utils/hex';
-import { CryptoMetaResponse, getMeta } from './cryptometa';
+import { CryptoMetaResponse } from './cryptometa';
 import { initParser } from '../utils/init-parse';
 import { Token } from '../models/token';
 import { TokenStatus } from '../config/token-status';
+
 
 export class Zilliqa {
   #provider = new RPCHttpProvider();
