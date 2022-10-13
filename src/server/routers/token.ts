@@ -14,10 +14,11 @@ tokens.get('/tokens', async (req: Request, res: Response) => {
   try {
     const limit = Number(req.query.limit) || 10;
     const offset = Number(req.query.offset) || 0;
+    const status = String(req.query.status) ? Number(req.query.status) || TokenStatus.Enabled;
     const type = Number(req.query.type) || TokenTypes.ZRC1;
     const [list, count] = await orm.em.getRepository(Token).findAndCount({
       type,
-      status: TokenStatus.Enabled,
+      status,
       scope: {
         $gt: 1
       }
