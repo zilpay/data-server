@@ -68,5 +68,5 @@ const chain = new Zilliqa();
     } catch (err) {
       log.error('update', err);
     }
-  }, 30000);
+  }, 90000);
 }());

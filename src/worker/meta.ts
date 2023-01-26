@@ -38,5 +38,5 @@ const chain = new Zilliqa();
 
   meta();
 
-  setInterval(() => meta(), 1000000); /// 16.66666667 min
+  setInterval(() => meta(), 90000); /// 16.66666667 min
 }());
