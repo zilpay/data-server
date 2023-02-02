@@ -35,7 +35,7 @@ dex.get('/dex', async (req: Request, res: Response) => {
       status: TokenStatus.Enabled,
       listed: true
     }, {
-      cache: 10,
+      cache: true,
       limit,
       offset,
       orderBy: {

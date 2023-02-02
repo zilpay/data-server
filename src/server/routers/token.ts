@@ -67,6 +67,7 @@ tokens.get('/nfts/:addr', async (req: Request, res: Response) => {
         base16: String(addr).toLowerCase()
       }
     }, {
+      cache: true,
       populate: ['balances.url', 'balances.tokenId'],
       populateWhere: PopulateHint.INFER,
       fields: [
