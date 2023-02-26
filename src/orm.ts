@@ -8,10 +8,10 @@ export async function initORM() {
       path: path.join(__dirname, '../migrations'),
     },
     cache: {
-      enabled: false
+      enabled: true
     },
     resultCache: {
-      expiration: 1000
+      expiration: 10000
     },
     entities: [path.join(__dirname, '/models')],
     entitiesTs: [path.join(__dirname, '/models/**/*.ts')],

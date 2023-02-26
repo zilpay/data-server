@@ -54,7 +54,7 @@ dex.get('/dex', async (req: Request, res: Response) => {
     const ratesData = await rateRepo.findOne({
       id: lastId
     }, {
-      cache: 5,
+      cache: true,
       fields: [
         'usd'
       ]
