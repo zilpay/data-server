@@ -152,8 +152,6 @@ const rates = [
 
 (async function(){
   const orm = await initORM();
-  const rateRepository = orm.em.getRepository(Rate);
-  const count = await rateRepository.count();
 
   async function updateRate() {
     log.info('start update rates');
@@ -173,4 +171,3 @@ const rates = [
 
   setInterval(() => updateRate(), 50000);
 }());
-

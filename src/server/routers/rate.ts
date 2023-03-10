@@ -1,4 +1,4 @@
-import { MikroORM, IDatabaseDriver, Connection, QueryOrder } from '@mikro-orm/core';
+import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 import { Router, Request, Response } from 'express';
 
 import { Rate } from '../../models/rate';

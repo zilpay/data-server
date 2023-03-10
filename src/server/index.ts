@@ -2,11 +2,15 @@
 // Import the express in typescript file
 import express from 'express';
 import bodyParser from 'body-parser';
+import bunyan from 'bunyan';
 
 import { router } from './routers';
 import { initORM } from '../orm';
  
 const cors = require("cors");
+const log = bunyan.createLogger({
+  name: "TRACK_SERVER"
+});
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -32,6 +36,6 @@ app.get('/health', (_req, _res) => {
 
   // Server setup
   app.listen(port, () => {
-    console.log(`TypeScript with Express http://localhost:${port}/`);
+    log.info(`REST listen http://localhost:${port}/`);
   });
 }());
