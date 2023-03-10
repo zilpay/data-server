@@ -13,7 +13,7 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "start": "DEBUG='express:router' ts-node ./index.ts | ./node_modules/.bin/bunyan"
+    "start": "ts-node ./index.ts | ./node_modules/.bin/bunyan"
   },
   "dependencies": {
     "@mikro-orm/core": "^5.4.2",
