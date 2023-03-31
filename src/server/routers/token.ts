@@ -95,7 +95,9 @@ tokens.post('/tokens/add', async (req: Request, res: Response) => {
 
   console.log(data);
 
-  return '';
+  return res.json({
+    works: 200
+  }); 
 });
 
 tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => {
