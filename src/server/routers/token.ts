@@ -90,7 +90,7 @@ tokens.get('/nfts/:addr', async (req: Request, res: Response) => {
   }
 });
 
-token.post('/tokens/add', async (req: Request, res: Response) => {
+tokens.post('/tokens/add', async (req: Request, res: Response) => {
   const data = req.body;
 
   console.log(data);
