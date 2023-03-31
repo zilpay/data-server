@@ -90,6 +90,14 @@ tokens.get('/nfts/:addr', async (req: Request, res: Response) => {
   }
 });
 
+token.post('/tokens/add', async (req: Request, res: Response) => {
+  const data = req.body;
+
+  console.log(data);
+
+  return '';
+});
+
 tokens.put('/token/:id', authMiddleware, async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   const id = Number(req.params.id);
