@@ -9,8 +9,6 @@ ratesRoute.get('/rates', async (req: Request, res: Response) => {
   const orm: MikroORM<IDatabaseDriver<Connection>> = req.app.get('orm');
   const rateRepo = orm.em.getRepository(Rate);
 
-  const clientIp = req.ip || req.connection.remoteAddress;
-  console.log('Client IP:', clientIp);
   try {
     const currency = req.query.currency ? String(req.query.currency).split(',') : undefined;
     const lastId = await rateRepo.count();
