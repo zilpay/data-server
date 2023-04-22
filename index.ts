@@ -7,7 +7,7 @@ import path from 'path';
 import { initORM } from './src/orm';
 
 
-(async function(){
+(async function() {
   const orm = await initORM();
 
   try {
@@ -36,7 +36,7 @@ import { initORM } from './src/orm';
 
   orm.close();
 
-  // new Worker(path.join(__dirname, './src/tasks/updater.js'));
+  new Worker(path.join(__dirname, './src/tasks/updater.js'));
   new Worker(path.join(__dirname, './src/tasks/server.js'));
   new Worker(path.join(__dirname, './src/tasks/tracker.js'));
   new Worker(path.join(__dirname, './src/tasks/rate.js'));
